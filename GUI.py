@@ -1,15 +1,18 @@
 import tkinter as tk
 from tkinter import filedialog
 
+
 def select_xlsx_file():
     filename = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx")])
     entry_xlsx_file.delete(0, tk.END)
     entry_xlsx_file.insert(0, filename)
 
+
 def select_csv_file():
     filename = filedialog.askopenfilename(filetypes=[("CSV files", "*.csv")])
     entry_csv_file.delete(0, tk.END)
     entry_csv_file.insert(0, filename)
+
 
 def select_output_folder():
     foldername = filedialog.askdirectory()
