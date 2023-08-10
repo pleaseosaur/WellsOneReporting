@@ -1,5 +1,8 @@
 import tkinter as tk  # import Tkinter package for GUI
 from tkinter import filedialog  # import filedialog for file selection
+import openpyxl  # import openpyxl for xlsx file manipulation
+import csv  # import csv for csv file manipulation
+from datetime import datetime  # import datetime for date manipulation
 
 
 def select_xlsx_file():  # function to select xlsx file
@@ -49,3 +52,32 @@ button_process = tk.Button(root, text="Process Files", command=None)  # create b
 button_process.grid(row=3, column=1, sticky=tk.W)  # place button in root window
 
 root.mainloop()  # run root window
+
+
+def process_files():
+    # open xlsx file
+    wb = openpyxl.load_workbook(entry_xlsx_file.get())  # load xlsx file
+
+    # extract year and month from current file name (assumes file name is YYYY.MM WellsOne Expense Manager)
+    file_name = entry_xlsx_file.get()  # get file name from entry box
+    current_year_month = file_name.split(" ")[0]  # split file name by space and get first element
+    current_year = current_year_month.split(".")[0]  # split current year and month by period and get first element
+    current_month = current_year_month.split(".")[1]  # split current year and month by period and get second element
+
+    # increment month by 1 and increment year by 1 if month is 13
+    if current_month == "12":  # if current month is 12
+        next_month = "01"  # set next month to 01
+        next_year = str(int(current_year) + 1)  # increment year by 1
+    else:  # if current month is not 12
+        next_month = str(int(current_month) + 1)  # increment month by 1
+        next_year = current_year  # set next year to current year
+
+    # create new file name for next month
+    next_year_month = next_year + "." + next_month  # create new file name for next month
+    new_file_name = f"{next_year_month} WellsOne Expense Manager"  # create new file name for next month
+
+    # save copy of wb as new file name in output folder
+    wb.save(f"{entry_output_folder.get()}/{new_file_name}.xlsx")  # save copy of wb as new file name in output folder
+
+
+button_process.config(command=process_files)  # set button_process command to process_files function
